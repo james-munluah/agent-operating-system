@@ -1,0 +1,51 @@
+# ~/.claude version control - DENY EVERYTHING, THEN ALLOW THE DOCTRINE.
+#
+# Written 2026-08-25. This directory is 2.0 GB across 25,963 files and holds
+# OAuth credentials, full conversation history, per-project memory and machine
+# state. A denylist here is the wrong shape: it fails open, so anything added
+# to this directory in future is versioned by default and the first mistake is
+# a credential in git history. This file fails CLOSED - a new file is ignored
+# until somebody deliberately allows it.
+#
+# What IS versioned is the operating doctrine: the rules, the profile, the
+# hooks, the skills, the agents and the settings that wire them together.
+# Measured at 61 files once vendored deps are excluded.
+
+# 1. Deny everything at the root.
+/*
+
+# 2. Allow back, explicitly, only the doctrine.
+!/.gitignore
+!/CLAUDE.md
+!/incidents.md
+!/james-profile.md
+!/ai-os-core.md
+!/settings.json
+!/hooks/
+!/skills/
+!/agents/
+!/commands/
+!/scripts/
+
+# 3. Never vendored dependencies inside an allowed directory.
+#    (skills/design-clone/node_modules alone is 19 MB of the 19 MB.)
+node_modules/
+
+# 4. Belt and braces. These must NEVER be versioned even if an allow rule
+#    above is widened later by someone who did not read section 1.
+#    Later rules win in gitignore, so these override every `!` above.
+.credentials.json
+.oauth_refresh.lock
+history.jsonl
+settings.local.json
+mcp-needs-auth-cache.json
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+*credentials*.json
+*secret*
+*.token

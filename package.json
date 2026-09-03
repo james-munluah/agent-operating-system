@@ -7,8 +7,8 @@
   "author": "James Munluah",
   "scripts": {
     "pretest": "node scripts/check-no-client-refs.mjs",
-    "test": "node --test hooks/__tests__/",
-    "gate": "node scripts/check-no-client-refs.mjs",
+    "test": "node scripts/check-no-client-refs.mjs --self-test && node --test",
+    "gate": "node scripts/check-no-client-refs.mjs --self-test && node scripts/check-no-client-refs.mjs",
     "demo": "node demo/review-lenses.mjs"
   },
   "engines": {

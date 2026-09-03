@@ -21,7 +21,25 @@
 
 // A protected env file: a ".env" path token, optionally ".<suffix>", whose
 // suffix is NOT one of the conventionally-secret-free allowlist below.
-const ENV_TOKEN = /\.env(\.[A-Za-z0-9_-]+)?\b/g;
+//
+// The leading (?<![A-Za-z0-9_]) matters and was added after a real false
+// positive: `process.env` contains the literal token `.env`, so a command doing
+// nothing but reading an in-process environment variable was blocked with a
+// message about reading a secrets file. A guard that fires on ordinary code is
+// a guard that gets uninstalled, which costs far more than the case it was
+// protecting.
+//
+// The lookbehind requires the character before ".env" to be a non-identifier -
+// a path separator, a quote, a space, or start-of-string - which is what a real
+// path looks like (`.env`, `./.env.local`, `app/.env`) and what an expression
+// like `process.env` or `import.meta.env` never is.
+//
+// KNOWN GAP, stated rather than left silent: this also stops matching an env
+// file named without a separator before the dot, such as `myapp.env`. That is
+// not a convention anywhere I have seen it, and the trade is deliberate -
+// a rare miss is preferable to a guard firing on every line of code that reads
+// an environment variable.
+const ENV_TOKEN = /(?<![A-Za-z0-9_])\.env(\.[A-Za-z0-9_-]+)?\b/g;
 const SAFE_SUFFIX = /^\.(example|sample|template|dist|defaults)$/i;
 
 function hasProtectedEnv(text) {
@@ -34,6 +52,13 @@ function hasProtectedEnv(text) {
   }
   return false;
 }
+
+// Exported so the predicate can be tested directly. The false-positive rate is
+// the thing that decides whether this hook survives contact with real work, and
+// it is not measurable through a subprocess that calls process.exit.
+module.exports = { hasProtectedEnv };
+
+if (require.main !== module) return;
 
 let raw = "";
 process.stdin.on("data", (chunk) => (raw += chunk));

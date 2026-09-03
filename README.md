@@ -5,12 +5,13 @@
 **A coding agent's instructions are a hint. Only a mechanism is a mechanism.**
 
 That sentence is the whole argument, and it was learned the expensive way. Over
-roughly two years of building and operating a production system with a coding
-agent, I wrote a rulebook: do not read `.env` files, carry your evidence in the
-same sentence as your claim, never run a destructive git command without stating
-the recovery path. The rulebook grew to several thousand words. The agent read it
-at the start of every session. It broke the rules anyway, and the pattern in
-*which* rules it broke turned out to be the useful finding:
+five months of building and operating a production system with a coding agent -
+131 active days, ~2,600 commits - I wrote a rulebook: do not read `.env` files,
+carry your evidence in the same sentence as your claim, never run a destructive
+git command without stating the recovery path. The rulebook grew to several
+thousand words. The agent read it at the start of every session. It broke the
+rules anyway, and the pattern in *which* rules it broke turned out to be the
+useful finding:
 
 > A rule the agent must remember to apply at an unpredictable moment fails.
 > A rule with a hook behind it does not.
@@ -156,7 +157,7 @@ a four-business operations platform (~181,000 lines of TypeScript, 274 database
 migrations, 560 test files) that the agent and I built and ran together.
 
 **Git history starts at the extraction commit, deliberately.** The source
-repository's history references the client throughout, and auditing two years of
+repository's history references the client throughout, and auditing ~2,600
 commit messages was not feasible. An honest short history beats an unaudited
 long one.
 

@@ -19,7 +19,7 @@ messaging bot sharing a database.
 | Database | 274 migrations |
 | Commits | ~2,600 |
 | Team | One person, plus a coding agent |
-| Duration | Roughly two years, continuous production operation |
+| Duration | 2026-04-02 to 2026-09-03: 5.1 months, 131 active days of 155 |
 
 The stack is unremarkable and deliberately so: Next.js, Postgres, a managed
 host. The interesting part is not the architecture. It is that a single

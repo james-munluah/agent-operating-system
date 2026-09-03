@@ -136,8 +136,8 @@ is its own, honestly:
 | | Status |
 |---|---|
 | Confidentiality gate | **Proven.** 33 rules self-tested; watched go red on a real leak probe (exit 1) and green after removal (exit 0). |
-| `skill-router` | **Proven.** 22 tests, including 14 real working prompts it must stay silent on. |
-| `evidence-clause-guard` | **Proven.** 13 tests. Verified non-vacuous by mutation: weakening the CAUSE evidence rule takes the suite from 55 pass to 3 fail. |
+| `skill-router` | **Proven.** 29 tests, including 14 real working prompts it must stay silent on. |
+| `evidence-clause-guard` | **Proven.** 14 tests. Verified non-vacuous by mutation: weakening the CAUSE evidence rule takes the suite from 55 pass to 3 fail. |
 | Runner: parsing, criteria, prompts | **Proven.** 12 tests, including one asserting every advertised lens has criteria behind it. |
 | Runner: the live API call | **NOT PROVEN.** No credentials were available in the session that wrote it. `runLens` has never executed against the API. |
 | Hooks under a live agent harness | **NOT PROVEN HERE.** They run daily in the private system they came from; this repository tests their logic, not their registration. |

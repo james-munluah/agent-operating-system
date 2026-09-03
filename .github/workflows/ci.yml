@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gate:
+    # Runs first and on its own job so a confidentiality failure is unmissable
+    # in the checks list, rather than buried in a test log.
+    name: confidentiality gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The self-test runs BEFORE the scan. A scan that reports "clean" because
+      # its rules quietly stopped matching is worse than no scan, so the rules
+      # are proven against known-bad samples first.
+      - name: gate self-test
+        run: node scripts/check-no-client-refs.mjs --self-test
+
+      - name: scan the tree
+        run: node scripts/check-no-client-refs.mjs
+
+  test:
+    name: hook tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: node --test
+        run: node --test
+
+  shellcheck:
+    name: hooks are valid node
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # A hook that throws on load blocks the user's prompt or their tool call.
+      # Syntax-checking every hook is cheap and catches that before install.
+      - name: parse every hook
+        run: |
+          set -e
+          for f in hooks/*.js; do
+            node --check "$f"
+            echo "ok  $f"
+          done

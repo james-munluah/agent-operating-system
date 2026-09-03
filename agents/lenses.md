@@ -2,7 +2,7 @@
 
 Single source of truth for the eight review lenses (PLAN, CTO, CFO, CMO, COO,
 DPO, DB, COMPTROLLER).
-Both the `/build` skill (inline checklists) and the
+Both the harness that dispatches reviews inline and the
 `agents/<lens>-review.md` agents (spawned for high-stakes work) read
 THIS file. Never copy these lists elsewhere - link here.
 
@@ -84,7 +84,7 @@ ordering**. Not naming, not structure, not style.
 - R2: non-obvious runtime architecture (queues/workers/schedulers) has a self-check.
 - R6: changes to a shared schema/contract are checked against the other consumer.
 - R7: Realtime/SSE/WS does not gate initial page load.
-- Definition of Done satisfied (works / safe / clean checklists in `~/.claude/CLAUDE.md`).
+- Definition of Done satisfied: the works / safe / clean checklist the project keeps.
 - Architecture: clear boundaries, focused files, no needless coupling.
 - Tests: cover happy path + error + empty; assert behaviour, not implementation.
 - **Hand off to COMPTROLLER** if this change computes, displays, reconciles or
@@ -107,7 +107,7 @@ ordering**. Not naming, not structure, not style.
 
 ## CMO - brand & conversion  (when public UI / customer copy touched)
 
-- Brand tokens from `docs/BRAND.md` honoured; no generic AI-default styling.
+- Brand tokens from the project design system honoured; no generic AI-default styling.
 - Every page has one clear primary CTA; no dead-end pages.
 - Mobile-first (the customers are on mobile).
 - Copy is on-voice; business facts exact (tagline, phone, hours - never invented).

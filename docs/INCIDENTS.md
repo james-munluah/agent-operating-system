@@ -1,8 +1,10 @@
 # Incidents that became mechanisms
 
-Every incident below **already had a written rule against it.** That is the only
-reason they are worth reading. The rule existed, the agent had read it that
-session, and the failure happened anyway.
+**Most of these already had a written rule against it, and that is the only
+reason they are worth reading.** The rule existed, the agent had read it that
+session, and the failure happened anyway. Incidents 2, 3, 4 and 5 are that
+shape. Incidents 1 and 6 are the other useful shape: a control that was itself
+the defect.
 
 The pattern that emerged is narrow and useful: a rule fails when applying it
 requires noticing an unpredictable moment. It holds when the trigger is
@@ -166,7 +168,45 @@ fault rather than a pass, and re-running produced the real numbers.
 
 ---
 
-## 6. The rung ladder
+## 6. The guard that blocked ordinary code, found while building this repository
+
+**What happened.** Mid-way through assembling this repository, a command was
+refused with a message about reading a secrets file. The command read an
+in-process environment variable and touched no file at all.
+
+`block-env-read` detects the literal token `.env` anywhere in a tool call. The
+expression `process` + `.env` contains that token. So the guard fired, correctly
+by its own rules, on the single most common way any Node program reads
+configuration.
+
+**Why this is worse than it looks.** The guard was not wrong about its pattern;
+it was wrong about its cost. **A secrets guard that fires on ordinary code gets
+uninstalled**, and an uninstalled guard is strictly worse than no guard, because
+the rulebook still claims the coverage. The same logic that makes
+`block-destructive-git` fire only on a dirty tree applies here and had been
+missed.
+
+**What was installed.** A lookbehind requiring a non-identifier character before
+the token, so a real path still matches and a property access does not. Plus 25
+tests weighted deliberately toward the MUST-NOT-BLOCK half, because the
+false-positive rate is what decides whether the hook survives.
+
+The fix opens a gap: an env file named with no separator before the dot no
+longer matches. That is written into the header rather than left silent.
+
+**Proof.** Reverting the lookbehind: 22 pass, 3 fail. Restoring it: 25 pass.
+
+**Two smaller things fell out of the same hour, and both are the doc's own
+lessons firing on their author.** The mutation script's first version replaced
+the first occurrence of the guard in the file, which was a *comment quoting it*,
+not the code - and the assert-it-landed check from incident 5 caught that and
+refused to report a result. Separately, a test fixture listed a destination
+filename as safe when it did contain a protected token; the hook was right and
+the fixture moved.
+
+---
+
+## 7. The rung ladder
 
 The rule that came out of all of the above, and the one that changed the most
 behaviour:

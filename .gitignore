@@ -1,0 +1,14 @@
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.DS_Store
+
+# Working notes for building this repo. Not part of the deliverable.
+.dev/
+
+# Never. The demo reads its key from the environment only.
+.env
+.env.*
+!.env.example

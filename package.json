@@ -1,0 +1,17 @@
+{
+  "name": "agent-operating-system",
+  "version": "1.0.0",
+  "description": "Guardrails, review agents and routing for coding agents. Mechanisms, not instructions.",
+  "type": "commonjs",
+  "license": "MIT",
+  "author": "James Munluah",
+  "scripts": {
+    "pretest": "node scripts/check-no-client-refs.mjs",
+    "test": "node --test hooks/__tests__/",
+    "gate": "node scripts/check-no-client-refs.mjs",
+    "demo": "node demo/review-lenses.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

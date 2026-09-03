@@ -39,6 +39,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: npm
+
+      # The demo tests import the Anthropic SDK, so dependencies are required
+      # here even though the hook tests need none. The first CI run failed on
+      # exactly this: it passed locally because node_modules already existed,
+      # which is the standard way a missing install step hides itself.
+      - name: npm ci
+        run: npm ci
+
       - name: node --test
         run: node --test
 
